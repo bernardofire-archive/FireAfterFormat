@@ -25,7 +25,6 @@ opcoes=$( dialog --stdout --separate-output                                     
     Git             "Sistema de controle de versão + configurações úteis"                               ON  \
     GitMeldDiff     "Torna o Meld o software para visualização do diff do git"                          ON  \
     Terminator      "Terminal alternativo ao gnome-terminal"                                            ON  \
-    Django	    "Framework web escrito em Python"							ON  \
     Media           "Codecs, flashplayer (32 ou 64 bits), JRE e compactadores de arquivos"              ON  \
     XChat           "Cliente IRC"                                                                       ON  \
     GoogleChrome    "Navegador web Google Chrome"                                                       ON  )
@@ -104,7 +103,6 @@ function install_gitmelddiff
         echo "#!/bin/bash" >> $HOME/.config/git_meld_diff.py
         echo "meld \"\$5\" \"\$2\"" >> $HOME/.config/git_meld_diff.py
         chmod +x $HOME/.config/git_meld_diff.py
-        git config --global diff.external $HOME/.config/git_meld_diff.py
     else
         dialog --title 'Aviso' \
         --msgbox 'Para tornar o Meld o software para visualização do diff do git, o git deve estar instalado. Para isto, rode novamente o script marcando as opções Git e GitMeldDiff.' \
@@ -114,12 +112,7 @@ function install_gitmelddiff
 
 function install_terminator
 {
-    sudo apt-get install -y Terminator
-}
-
-function install_django
-{
-    sudo pip install -U django
+    sudo apt-get install -y terminator
 }
 
 function install_media
