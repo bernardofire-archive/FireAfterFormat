@@ -24,7 +24,7 @@ opcoes=$( dialog --stdout --separate-output                                     
     Media           "Codecs, flashplayer (32 ou 64 bits), JRE e compactadores de arquivos"              ON  \
     XChat           "Cliente IRC"                                                                       ON  \
     Synergy         "Compartilhar teclado e mouse com outro computador"                                 ON  \
-    GoogleChrome    "Navegador web Google Chrome"                                                       ON  )
+    Chromium        "Distribuição livre do Google Chrome"                                               ON  )
 
 #=============================== Processamento =================================
 
@@ -134,17 +134,9 @@ function install_synergy
     sudo apt-get install -y synergy
 }
 
-function install_googlechrome
+function install_chromium
 {
-    if [ "$arquitetura" = '32-bit' ]
-    then
-        wget -O /tmp/google-chrome-stable-i386.deb http://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb
-        sudo dpkg -i /tmp/google-chrome-stable-i386.deb
-    elif [ "$arquitetura" = '64-bit' ]
-    then
-        wget -O /tmp/google-chrome-stable-amd64.deb http://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i /tmp/google-chrome-stable-amd64.deb
-    fi
+  sudo apt-get install -y chromium-browser
 }
 
 echo "$opcoes" |
