@@ -6,8 +6,6 @@ FOLDER=$(cd $(dirname $0); pwd -P)
 # Pegando arquitetura do sistema. Valores de retorno: '32-bit' ou '64-bit'
 arquitetura=`file /bin/bash | cut -d' ' -f3`
 
-vim=0
-
 #================================ Menu =========================================
 
 # Instala o dialog
@@ -17,13 +15,11 @@ opcoes=$( dialog --stdout --separate-output                                     
     --title "BernardoFire afterFormat - Pós Formatação para Ubuntu"                                   \
     --checklist 'Selecione os softwares que deseja instalar:' 0 0 0                                         \
     Desktop         "Muda \"Área de Trabalho\" para \"Desktop\" *(Apenas ptBR)"                         ON  \
-    Monaco          "Adiciona fonte Monaco e seleciona para o Terminal"				                    ON  \
+    Axel            "Axel para usar no lugar do wget"                                                   ON  \
+    Monaco          "Adiciona fonte Monaco e seleciona para o Terminal"	                                ON  \
     SSH             "SSH server e client"                                                               ON  \
     Python          "Ambiente para desenvolvimento com python"                                          ON  \
-    VIM             "Editor de texto"			                                                        ON  \
-    Refactoring     "Conjunto de scripts para refatoração de código"                                    ON  \
     Git             "Sistema de controle de versão + configurações úteis"                               ON  \
-    GitMeldDiff     "Torna o Meld o software para visualização do diff do git"                          ON  \
     Terminator      "Terminal alternativo ao gnome-terminal"                                            ON  \
     Media           "Codecs, flashplayer (32 ou 64 bits), JRE e compactadores de arquivos"              ON  \
     XChat           "Cliente IRC"                                                                       ON  \
@@ -42,6 +38,11 @@ function install_desktop
     mv /tmp/user-dirs.dirs.modificado $HOME/.config/user-dirs.dirs
     xdg-user-dirs-gtk-update
     xdg-user-dirs-update
+}
+
+function install_axel
+{
+  sudo apt-get install -y axel
 }
 
 function install_monaco
@@ -75,40 +76,9 @@ function install_python
     echo "source /usr/local/bin/virtualenvwrapper.sh"  >> $HOME/.bashrc
 }
 
-function install_vim
-{
-    sudo apt-get install -y vim
-    vim=1
-}
-
-function install_refactoring
-{
-    wget -O /tmp/refactoring-scripts.tar.gz http://github.com/hugomaiavieira/refactoring-scripts/tarball/master --no-check-certificate
-    tar zxvf /tmp/refactoring-scripts.tar.gz -C /tmp
-    /tmp/hugomaiavieira-refactoring-scripts*/install.sh
-}
-
 function install_git
 {
     sudo apt-get install -y git-core
-}
-
-function install_gitmelddiff
-{
-    install_git
-    git --version 2> /dev/null
-    if ! [ "$?" -eq 127 ]
-    then
-        sudo apt-get install -y meld
-        touch $HOME/.config/git_meld_diff.py
-        echo "#!/bin/bash" >> $HOME/.config/git_meld_diff.py
-        echo "meld \"\$5\" \"\$2\"" >> $HOME/.config/git_meld_diff.py
-        chmod +x $HOME/.config/git_meld_diff.py
-    else
-        dialog --title 'Aviso' \
-        --msgbox 'Para tornar o Meld o software para visualização do diff do git, o git deve estar instalado. Para isto, rode novamente o script marcando as opções Git e GitMeldDiff.' \
-        0 0
-    fi
 }
 
 function install_terminator
