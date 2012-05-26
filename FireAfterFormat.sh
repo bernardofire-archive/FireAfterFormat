@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Mandinga para pegar o diretório onde o script foi executado
-FOLDER=$(cd $(dirname $0); pwd -P)
-
-# Pegando arquitetura do sistema. Valores de retorno: '32-bit' ou '64-bit'
-arquitetura=`file /bin/bash | cut -d' ' -f3`
-
-#================================ Menu =========================================
-
-# Instala o dialog
 sudo apt-get install -y dialog > /dev/null
 
 opcoes=$( dialog --stdout --separate-output                                                                 \
@@ -22,7 +13,6 @@ opcoes=$( dialog --stdout --separate-output                                     
     Ruby            "Ambiente para desenvolvimento com ruby"                                            ON  \
     Git             "Sistema de controle de versão + configurações úteis"                               ON  \
     Terminator      "Terminal alternativo ao gnome-terminal"                                            ON  \
-    Media           "Codecs, flashplayer (32 ou 64 bits), JRE e compactadores de arquivos"              ON  \
     XChat           "Cliente IRC"                                                                       ON  \
     Synergy         "Compartilhar teclado e mouse com outro computador"                                 ON  \
     Chromium        "Distribuição livre do Google Chrome"                                               ON  )
@@ -102,49 +92,27 @@ function install_ruby
 function install_git
 {
     sudo apt-get install -y git-core
+    git config --global alias.br branch
+    git config --global alias.ci commit
+    git config --global alias.pom "push origin master"
+    git config --global alias.plm "pull origin master"
+    git config --global alias.co checkout
+    git config --global alias.st status
+    git config --global alias.df diff
+    git config --global alias.undo "reset --soft HEAD^"
+    git config --global alias.gl "log --graph --pretty=oneline --abbrev-commit"
+    git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+
+    git config --global color.branch auto
+    git config --global color.diff auto
+    git config --global color.interactive auto
+    git config --global color.status auto
+    git config --global color.ui auto
 }
 
 function install_terminator
 {
     sudo apt-get install -y terminator
-}
-
-function install_media
-{
-    # A referência para a instalação desses pacotes foi o http://ubuntued.info/
-
-    # Adiciona o repositório Medibuntu
-    sudo wget --output-document=/etc/apt/sources.list.d/medibuntu.list http://www.medibuntu.org/sources.list.d/$(lsb_release -cs).list &&
-         sudo apt-get update &&
-         sudo apt-get -y --allow-unauthenticated install medibuntu-keyring &&
-         sudo apt-get update
-
-    # Adiciona o repositório Partner. É um repositório oficial que contém os
-    # pacotes de instalação do Java da Sun.
-    sudo add-apt-repository "deb http://archive.canonical.com/ubuntu natty partner" && sudo apt-get update
-
-    # Pacotes de codecs de áudio e vídeo
-    sudo apt-get install -y non-free-codecs libdvdcss2 faac faad ffmpeg    \
-         ffmpeg2theora flac icedax id3v2 lame libflac++6 libjpeg-progs     \
-         libmpeg3-1 mencoder mjpegtools mp3gain mpeg2dec mpeg3-utils       \
-         mpegdemux mpg123 mpg321 regionset sox uudeview vorbis-tools x264
-
-    # Pacotes de compactadores de ficheiros
-    sudo apt-get install -y arj lha p7zip p7zip-full p7zip-rar rar unrar unace-nonfree
-
-    if [ "$arquitetura" = "32-bit" ]
-    then
-        # Instalar o flash e o java
-        sudo apt-get install -y flashplugin-nonfree sun-java6-fonts sun-java6-jre sun-java6-plugin
-    elif [ "$arquitetura" = "64-bit" ]
-    then
-        # Adiciona o repositório oficial da Adobe para o Flash
-        sudo add-apt-repository ppa:sevenmachines/flash && sudo apt-get update
-        # Remover qualquer versão do Flashplayer 32 bits para que não haja conflitos
-        sudo apt-get purge -y flashplugin-nonfree gnash gnash-common mozilla-plugin-gnash swfdec-mozilla
-        # Instalar o flash e o java
-        sudo apt-get install -y flashplugin64-installer sun-java6-fonts sun-java6-jre sun-java6-plugin
-    fi
 }
 
 function install_xchat
