@@ -15,7 +15,8 @@ opcoes=$( dialog --stdout --separate-output                                     
     Terminator      "Terminal alternativo ao gnome-terminal"                                            ON  \
     XChat           "Cliente IRC"                                                                       ON  \
     Synergy         "Compartilhar teclado e mouse com outro computador"                                 ON  \
-    Chromium        "Distribuição livre do Google Chrome"                                               ON  )
+    Chromium        "Distribuição livre do Google Chrome"                                               ON  \
+    Htop            "Monitorar sistema"                                                                 ON  )
 
 #=============================== Processamento =================================
 
@@ -127,7 +128,12 @@ function install_synergy
 
 function install_chromium
 {
-  sudo apt-get install -y chromium-browser
+     sudo apt-get install -y chromium-browser
+}
+
+function htop
+{
+    sudo apt-get install htop
 }
 
 echo "$opcoes" |
