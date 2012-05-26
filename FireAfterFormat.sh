@@ -16,6 +16,7 @@ opcoes=$( dialog --stdout --separate-output                                     
     XChat           "Cliente IRC"                                                                       ON  \
     Synergy         "Compartilhar teclado e mouse com outro computador"                                 ON  \
     Chromium        "Distribuição livre do Google Chrome"                                               ON  \
+    AptFast        "apt-get com axel"                                                                  ON  \
     Htop            "Monitorar sistema"                                                                 ON  )
 
 #=============================== Processamento =================================
@@ -131,7 +132,14 @@ function install_chromium
      sudo apt-get install -y chromium-browser
 }
 
-function htop
+function install_aptfast
+{
+    sudo apt-get -y install axel
+    axel -an 10 https://raw.github.com/gist/2298695/b81211200b7bf14f8d498af32770dc4bad7c7f3c/apt-fast.sh >> /usr/local/bin/apt-fast
+    chmod -x /usr/local/bin/apt-fast
+}
+
+function install_htop
 {
     sudo apt-get install htop
 }
