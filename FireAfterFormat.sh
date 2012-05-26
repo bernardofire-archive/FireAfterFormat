@@ -16,9 +16,10 @@ opcoes=$( dialog --stdout --separate-output                                     
     --checklist 'Selecione os softwares que deseja instalar:' 0 0 0                                         \
     Desktop         "Muda \"Área de Trabalho\" para \"Desktop\" *(Apenas ptBR)"                         ON  \
     Axel            "Axel para usar no lugar do wget"                                                   ON  \
-    Monaco          "Adiciona fonte Monaco e seleciona para o Terminal"	                                ON  \
+    Monaco          "Adiciona fonte Monaco e seleciona para o Terminal"                                 ON  \
     SSH             "SSH server e client"                                                               ON  \
     Python          "Ambiente para desenvolvimento com python"                                          ON  \
+    Ruby            "Ambiente para desenvolvimento com ruby"                                            ON  \
     Git             "Sistema de controle de versão + configurações úteis"                               ON  \
     Terminator      "Terminal alternativo ao gnome-terminal"                                            ON  \
     Media           "Codecs, flashplayer (32 ou 64 bits), JRE e compactadores de arquivos"              ON  \
@@ -74,6 +75,28 @@ function install_python
     mkdir -p $HOME/.virtualenvs
     echo "export WORKON_HOME=\$HOME/.virtualenvs" >> $HOME/.bashrc
     echo "source /usr/local/bin/virtualenvwrapper.sh"  >> $HOME/.bashrc
+}
+
+function install_ruby
+{
+    sudo apt-get install git-core curl
+    bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+    if [ -e ~/.zshrc]
+    then
+         echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM function' >> ~/.zshrc
+         source ~/.zshrc
+    fi
+    echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM function' >> ~/.bashrc
+    source ~/.bashrc
+
+    sudo apt-get install build-essential bison openssl libreadline5 \
+    libreadline-dev zlib1g zlib1g-dev libssl-dev sqlite3 libsqlite3-0 \
+    libsqlite3-dev libxml2-dev libxslt1-dev libreadline-dev
+
+    rvm install 1.9.3 --with-readline-dir=/usr/include/readline
+
+    rvm 1.9.3@global
+    gem install bundler pry --no-ri --no-rdoc
 }
 
 function install_git
