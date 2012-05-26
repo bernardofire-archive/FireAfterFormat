@@ -16,7 +16,8 @@ opcoes=$( dialog --stdout --separate-output                                     
     XChat           "Cliente IRC"                                                                       ON  \
     Synergy         "Compartilhar teclado e mouse com outro computador"                                 ON  \
     Chromium        "Distribuição livre do Google Chrome"                                               ON  \
-    AptFast        "apt-get com axel"                                                                  ON  \
+    AptFast         "apt-get com axel"                                                                  ON  \
+    Zsh             "zsh com oh-my-zsh"                                                                 ON  \
     Htop            "Monitorar sistema"                                                                 ON  )
 
 #=============================== Processamento =================================
@@ -137,6 +138,13 @@ function install_aptfast
     sudo apt-get -y install axel
     axel -an 10 https://raw.github.com/gist/2298695/b81211200b7bf14f8d498af32770dc4bad7c7f3c/apt-fast.sh >> /usr/local/bin/apt-fast
     chmod -x /usr/local/bin/apt-fast
+}
+
+function install_zsh
+{
+    sudo apt-get install zsh
+    chsh -s /bin/zsh
+    wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
 }
 
 function install_htop
